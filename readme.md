@@ -55,3 +55,5 @@
   --max-reprojection-error 15 `
   --workers 6 `
   --auto-every 2
+
+For some reason the model is working poorly after i recreated it. Try deleting the first images (before take-off) to fix this.
