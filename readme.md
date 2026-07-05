@@ -30,14 +30,12 @@
   --base-fov 60 `
   --use-dzoom
 
-6. python .\dataset\video_position_map_server_dual_estimator.py `
+6. py .\dataset\video_position_map_server_current_frame.py `
   -v ".\unprocessed\videos\DJI_0149.mp4" `
   -db ".\dataset\graph.db" `
   -r "." `
   --global-estimator-script ".\dataset\estimate_image_position.py" `
   --bfs-estimator-script ".\dataset\estimate_image_position_bfs_only.py" `
-  --sample-every 30 `
-  --feature-max-size 1000 `
   --global-candidate-steps "0" `
   --global-timeout 45 `
   --local-timeout 8 `
@@ -45,11 +43,15 @@
   --bfs-depth 2 `
   --bfs-neighbor-limit 40 `
   --bfs-max-candidates 200 `
+  --feature-max-size 1000 `
   --max-features 1000 `
+  --ratio 0.75 `
+  --ransac 5 `
   --min-good 12 `
   --min-inliers 8 `
   --min-inlier-ratio 0.15 `
   --min-coverage 0.01 `
   --min-confidence 0.08 `
   --max-reprojection-error 15 `
-  --workers 6
+  --workers 6 `
+  --auto-every 2
