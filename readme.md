@@ -1,30 +1,55 @@
-# Assignment Name
+0. py -m pip install yt-dlp
 
-Short 1–2 sentence description of what this project does.
+1. py .\download_vids.py
 
-## Project Overview
+1. python -m pip install opencv-python numpy pillow
 
-Explain the goal of the assignment.
+2. python .\dataset\extract_frames.py `
+  -i ".\unprocessed\videos" `
+  -f 60 `
+  -o ".\dataset\frames"
 
-Example:
-This project compares two images using SIFT feature matching. It finds matching keypoints, estimates the geometric transformation between the images, and outputs translation, rotation, scale, and a visualization of the matches.
+3. python .\dataset\remove_similar.py `
+  -i ".\dataset\frames" `
+  -p 97
 
-## Features
+4. python .\dataset\build_match_graph.py `
+  -i ".\dataset\frames" `
+  -db ".\dataset\graph.db" `
+  --max-size 1000 `
+  --max-features 2500 `
+  --same-folder-window 30 `
+  --cross-folder-top-k 10 `
+  --workers 6 `
+  --matcher flann `
+  --overwrite
 
-- Detects keypoints in two images
-- Matches similar points between the images
-- Filters bad matches using Lowe's ratio test
-- Estimates affine transformation using RANSAC
-- Prints translation, rotation, scale, and shear
-- Saves an output image with match lines
+5. python .\dataset\analyze_transforms.py `
+  -db ".\dataset\graph.db" `
+  -tp ".\unprocessed\SRT" `
+  --base-fov 60 `
+  --use-dzoom
 
-## Requirements
-
-- Python 3.10+
-- OpenCV
-- NumPy
-
-Install dependencies:
-
-```bash
-py -m pip install opencv-contrib-python numpy
+6. python .\dataset\video_position_map_server_dual_estimator.py `
+  -v ".\unprocessed\videos\DJI_0149.mp4" `
+  -db ".\dataset\graph.db" `
+  -r "." `
+  --global-estimator-script ".\dataset\estimate_image_position.py" `
+  --bfs-estimator-script ".\dataset\estimate_image_position_bfs_only.py" `
+  --sample-every 30 `
+  --feature-max-size 1000 `
+  --global-candidate-steps "0" `
+  --global-timeout 45 `
+  --local-timeout 8 `
+  --needed-matches 1 `
+  --bfs-depth 2 `
+  --bfs-neighbor-limit 40 `
+  --bfs-max-candidates 200 `
+  --max-features 1000 `
+  --min-good 12 `
+  --min-inliers 8 `
+  --min-inlier-ratio 0.15 `
+  --min-coverage 0.01 `
+  --min-confidence 0.08 `
+  --max-reprojection-error 15 `
+  --workers 6
